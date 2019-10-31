@@ -1,0 +1,158 @@
+https://ssh.cloud.google.com/cloudshell/editor?shellonly=true
+PS1="\w$ "
+http://www.academia-online.org/linux/ext/ex1/ext2.pdf
+https://en.wikipedia.org/wiki/Master_boot_record
+https://en.wikipedia.org/wiki/Linux_startup_process
+https://en.wikipedia.org/wiki/Fork_(system_call)
+https://en.wikipedia.org/wiki/Virtual_memory
+which systemd
+https://en.wikipedia.org/wiki/Page_fault
+https://en.wikipedia.org/wiki/Fork_bomb
+whereis cron
+https://en.wikipedia.org/wiki/Thread_(computing)
+https://en.wikipedia.org/wiki/Thread_safety
+select-editor
+crontab -l
+crontab -e
+top -b -n1
+http://www.academia-online.org/linux/ext/ex1
+https://en.wikipedia.org/wiki/Inode
+vmstat
+sysctl vm.swappiness
+https://en.wikipedia.org/wiki/Vmstat
+https://en.wikipedia.org/wiki/Cron
+https://en.wikipedia.org/wiki/Sysctl
+https://en.wikipedia.org/wiki/Paging
+https://en.wikipedia.org/wiki/Out_of_memory
+git clone https://github.com/secobau/lpic2 && cd lpic2 && sudo cp -rv usr /
+apt-cache search mail | awk ' { print $1 } ' | sort | less
+sudo apt-get install -y bsd-mailx
+https://en.wikipedia.org/wiki/Ps_(Unix)
+git pull && sudo cp -rv usr /
+sudo chmod +x /usr/local/sbin/*.sh
+sudo crontab -e
+* * * * * /usr/local/sbin/monitor.sh
+sudo crontab -l
+sudo bash
+PS1="\w# "
+https://en.wikipedia.org/wiki/Password_strength
+openssl rand -base64 32 | tr --delete '/+=' | fold --width 22 | head -n 1
+https://en.wikipedia.org/wiki/Setuid
+https://en.wikipedia.org/wiki/Internet_protocol_suite
+cat /etc/hosts
+cat /etc/resolv.conf
+grep hosts /etc/nsswitch.conf
+echo nameserver 8.8.8.8 | sudo tee /etc/resolv.conf
+sudo chattr +i /etc/resolv.conf
+lsattr /etc/resolv.conf
+host -a upm.es
+host -a www.upm.es 209.244.0.3
+https://en.wikipedia.org/wiki/IPv4
+https://en.wikipedia.org/wiki/Transmission_Control_Protocol
+https://en.wikipedia.org/wiki/Address_Resolution_Protocol
+arp
+sysctl net.ipv4.ip_forward
+https://en.wikipedia.org/wiki/Ethernet_frame
+https://en.wikipedia.org/wiki/EtherType
+sudo iptables --list-rules --table filter | grep --invert-match DOCKER | less
+sudo awk --field-separator SRC= /DST=142.93.160.4/'{ print $2 }' /var/log/messages | cut --delimiter . --field 1,2,3 | sort | uniq --count | sort --numeric-sort 1> monitor.$( date +%F-%H%M )
+sudo grep '172\.241\.' /var/log/messages
+sudo zcat /var/log/messages.4.gz | grep '142\.93\.' --max-count 1
+ip address | grep "inet.*lo$" | cut --delimiter / --field 1 | awk '{ print $2 }'
+ip address | grep "inet.*lo$" | cut --delimiter / --field 2 | awk '{ print $1 }'
+ip=$(  ip address | grep "inet.*eth0$" | cut --delimiter / --field 1 | awk '{ print $2 }' )
+cdr=$( ip address | grep "inet.*eth0$" | cut --delimiter / --field 2 | awk '{ print $1 }' )
+ipcalc  $ip/$cdr | awk /Network/'{ print $2 }'
+
+https://console.aws.amazon.com/
+
+# Avisar a seliniux
+
+touch /.autorelabel
+
+#Crear tuneles
+
+ssh-keygen
+cat /home/ec2-user/.ssh/id_rsa.pub
+cat .ssh/authorized_keys
+https://www.ssh.com/ssh/tunneling/example
+ssh -L localhost:8080:www.upm.es:80  172.31.41.66
+ssh -L localhost:8443:www.upm.es:443 172.31.41.66
+
+# Kernel....descarga
+
+sudo yum install -y elinks
+links kernel.org
+unxz linux-5.3.8.tar.xz
+tar xfv linux-5.3.8.tar
+cd linux-5.3.8
+du -sh
+du -sh --inodes
+sudo yum install -y flex
+
+# Ejemplo creacion de disco
+
+dd if=/dev/zero of=ejemplo.disk count=10000
+mkfs ejemplo.disk
+sudo mount -o loop ejemplo.disk /media/
+lsblk -f
+tune2fs ejemplo.disk -l
+
+# crear memo swap si no tenemos suficiente
+
+dd 0< /dev/zero 1> emergencia.swap count=10000
+mkswap emergencia.swap
+chmod 600 emergencia.swap
+sudo chown root. emergencia.swap
+sudo swapon emergencia.swap
+swapon --show
+cat 0< /dev/tcp/time.ien.it/13
+dd 0< /dev/sda 1> /dev/sdb
+fdisk /dev/sdb
+pvresize /dev/sda2
+lvextend --size +24g /dev/mapper/centos-root
+xfs_growfs /
+
+# Sockets
+
+cat 0< /dev/tcp/time.ien.it/13
+exec 3< /dev/tcp/www.upm.es/80
+echo GET / 1>& 3
+cat 0<& 3
+ls -l /proc/$( echo $$ )/fd
+lsof -n -P -p $( echo $$ ) | grep TCP
+exec 4< /dev/tcp/$hostname/80 && echo 'GET /' 1>& 4 && cat 0<& 4
+
+# Uso ncat peligro
+
+nc -l -v 9000
+ps -afww
+nc -v localhost 9000
+sudo yum install -y nmap-ncat
+ss -ltn
+ncat --listen --verbose --sh-exec date localhost 9000
+nc -v localhost 9000
+ncat --listen --verbose --exec ./script --keep-open localhost 9000
+ncat --listen --verbose --sh-exec bash --keep-open localhost 9000
+sudo ncat --listen --verbose --exec "/bin/bash -x" --keep-open 9000
+sudo ncat --listen --verbose --sh-exec "bash -x" --keep-open 9000
+sudo ncat --listen --verbose --exec "/bin/bash -x" --keep-open --udp 9000
+nc -v -u localhost 9000
+sudo ncat --listen --verbose --exec "/bin/bash -x" --keep-open --udp 22
+sudo nc -v -u 172.31.34.135 -p 22 22
+sudo ncat --listen --verbose --exec "/bin/bash -x" --keep-open --udp 22 1>> ncat.log 2>& 1
+ncat --listen --verbose 2222 | tar --extract --preserve --gzip --file -
+tar --create --gzip --file - environment/ | nc -v 172.31.34.135 -p 3333 2222
+sudo ncat --listen --verbose --sh-exec "nc www.google.es 80" --keep-open --udp 22
+sudo nc -v -u 172.31.34.135 -p 22 22
+ncat --listen --verbose --sh-exec "cat index.html" --keep-open  2222
+nc -v -p 2222 172.31.34.135 2222
+
+# Montar un servicio
+
+systemctl daemon-reload && systemctl enable backdoor.service && systemctl start backdoor.service
+git clone https://github.com/secobau/lpic2 && cd lpic2
+cp usr/local/sbin/tcpdump.sh /usr/local/sbin
+chmod +x /usr/local/sbin/tcpdump.sh
+systemctl daemon-reload && systemctl enable tcpdump.service && systemctl start tcpdump.service
+systemctl list-units --all
